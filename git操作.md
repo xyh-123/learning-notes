@@ -8,8 +8,8 @@ git add . //将文件夹中的所有文件打包到仓库中
 git add hello.txt //将文件夹中的某个文件打包到仓库中
 
 #根据第二步选择
-git -commit -m "first_commit" //引号中可以自己定义，对应于第二步的git add .
-git -commit -m hello.txt //对应于第二步的git add .
+git commit -m "first_commit" //引号中可以自己定义，对应于第二步的git add .
+git commit -m hello.txt //对应于第二步的git add .
 
 ![image-20211215093609999](assess/image-20211215093609999.png)
 
