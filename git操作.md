@@ -1,4 +1,4 @@
-如何将本地文件提交到github上的仓库中
+gi如何将本地文件提交到github上的仓库中
 ===
 
 git init  //初始化仓库，如果该文件夹是第一次上传，也就是文件夹中没有.git文件，则需要先初始化仓库，否则跳过这一步
@@ -28,6 +28,18 @@ git config --global http.sslVerify "false"
 ![image-20211215094245565](assess/image-20211215094245565.png)
 
 [解决链接](https://blog.csdn.net/weixin_41010198/article/details/119698015)
+
+避免同一个仓库每次提交代码都要输入`token`，可以把`token`直接添加远程仓库链接中
+
+git remote set-url origin https://<your_token>@github.com/<USERNAME>/<REPO>.git
+
+- `<your_token>`：换成你自己得到的`token`
+- `<USERNAME>`：是你自己`github`的`用户名`，<font color='red'>一定是用户名，不可以是邮箱</font>
+- `<REPO>`：是你的`仓库名称`
+
+eg-git remote set-url origin https://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@github.com/xyh-123/learning-notes.git/    
+
+
 
 如果 push 等操作没有出现`输入密码选项`，请先输入如下命令，之后就可以看到输入密码选项了
 
@@ -60,6 +72,8 @@ git pull
 
 **git pull --rebase origin master**    //本地生成ReadMe文件
 git push origin master
+
+
 
 
 
