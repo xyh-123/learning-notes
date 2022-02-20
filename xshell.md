@@ -146,3 +146,15 @@ lspci -v -s [显卡编号]
 nvidia-smi 
 ```
 
+查看文件的修改时间
+---
+
+```
+stat filename
+```
+
+![image-20220217111912851](assess/image-20220217111912851.png)Access Time：简写为atime，表示文件的访问时间。当文件内容被访问时，更新这个时间 
+
+Modify Time：简写为mtime，表示文件内容的修改时间，当文件的数据内容被修改时，更新这个时间。 
+
+Change Time：简写为ctime，表示文件的状态时间，当文件的状态权限被修改时，更新这个时间，例如文件的链接数，大小，权限，Blocks数。
