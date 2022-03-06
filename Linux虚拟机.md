@@ -81,6 +81,25 @@ tar cvf FileName.tarsu
 gunzip -d pythontab.gz
 ```
 
+查询某个端口是否被占用，再执行
+
+```
+#如何没有安装先安装一下
+sudo apt install net-tools
+```
+
+```
+netstat  -anp  |grep 端口号
+```
+
+![image-20220306213947401](assess/image-20220306213947401.png)
+
+杀死某个端口的进程
+
+```
+sudo fuser -k -n tcp 80
+```
+
 Anaconda使用
 ---
 
@@ -141,3 +160,141 @@ requirements.txt中的git源安装问题
 如果安装失败，可以去github上下载指定的文件夹然后放到该目录
 
 ![image-20220305094828985](assess/image-20220305094828985.png)
+
+
+
+**修改PostgreSQL数据库默认用户postgres的密码**
+
+1. 修改**PostgreSQL数据库**默认用户postgres的密码
+
+```
+sudo -u postgres 
+psql
+ALTER USER postgres WITH PASSWORD 'xxxxxxxxxxx';
+#\q
+```
+
+![image-20220305204807819](assess/image-20220305204807819.png)
+
+2.修改**linux系统**postgres用户的密码
+
+<u>一定要切换用户再去修改</u>
+
+```
+#步骤一：删除用户postgres的密码
+sudo passwd -d postgres
+#步骤二：设置用户postgres的密码
+sudo -u postgres passwd
+```
+
+![image-20220305213335835](assess/image-20220305213335835.png)
+
+
+
+创建超级用户
+
+```
+createuser --interactive
+```
+
+![image-20220305205007598](assess/image-20220305205007598.png)
+
+创建数据库
+
+```
+createdb dbname
+#指定用户创建数据库
+sudo -i -u xyh createdb genuidb
+```
+
+删除数据库
+
+```
+dropdb dbname
+```
+
+修改PostgreSQL用户密码
+
+![image-20220305214119053](assess/image-20220305214119053.png)
+
+```
+alter user webdev with password '123456';
+```
+
+为用户创建数据库并赋予所有权限
+
+```
+GRANT ALL PRIVILEGES ON DATABASE exampledb to dbuser;
+```
+
+![](assess/1-16464897962772.png)
+
+查看postgresql自带的插件
+
+![image-20220306103219168](assess/image-20220306103219168.png)
+
+配置rdki-postgresqpl
+---
+
+首先激活安装rdkit-postgresql的环境
+
+```
+conda install -c rdkit rdkit-postgresql
+```
+
+数据库初始化
+
+`rdkdata`是数据库数据文件目录
+
+```
+/home/xyh/anaconda3/envs/genui/bin/postgres -D rdkdata
+```
+
+![img](assess/NFH%5DM7A%7DYZ%25UL%7DPTC$@%25HC.png)
+
+执行成功之后会出现对应的文件
+
+![img](assess/%5D%5BLOV712SAR2ZAF1PE7NG%7D8.png)
+
+启动服务
+
+```
+/home/xyh/anaconda3/envs/genui/bin/postgres -D rdkdata
+```
+
+创建数据库，必须用安装环境的用户名，否则会出现下面这种情况
+
+![image-20220306221016514](assess/image-20220306221016514.png)
+
+给数据库添加rdkit扩展
+
+![image-20220306221541368](assess/image-20220306221541368.png)
+
+### 查看数据库的一些情况
+
+首先执行
+
+```
+psql 数据库名
+```
+
+```
+\du
+```
+
+![image-20220306222043706](assess/image-20220306222043706.png)
+
+查看数据库中有哪些插件
+
+```
+\dx
+```
+
+![image-20220306222057449](assess/image-20220306222057449.png)
+
+
+
+
+
+
+
