@@ -100,6 +100,26 @@ netstat  -anp  |grep 端口号
 sudo fuser -k -n tcp 80
 ```
 
+![img](assess/WH%25CJKKKCX8ZWHF%7D_NE6UVM.png)
+
+查看虚拟机的IP地址
+
+```
+ifconfig
+```
+
+![image-20220307113655447](assess/image-20220307113655447.png)
+
+方框内的就是虚拟机的IP地址
+
+给文件重命名
+
+```
+
+```
+
+
+
 Anaconda使用
 ---
 
@@ -258,9 +278,25 @@ conda install -c rdkit rdkit-postgresql
 
 启动服务
 
+启动服务前先检查5432端口是否被占用，如果被占用先杀死端口程序(一般默认的postgresql会自启动占用)
+
+杀死某个端口的进程
+
+```
+sudo fuser -k -n tcp 5
+```
+
+![img](assess/WH%25CJKKKCX8ZWHF%7D_NE6UVM.png)
+
 ```
 /home/xyh/anaconda3/envs/genui/bin/postgres -D rdkdata
 ```
+
+![image-20220307115448430](assess/image-20220307115448430.png)
+
+有如下显示则表示启动成功
+
+![img](assess/5RFHUIZFY4%5BW%25L6@B7F_1.png)
 
 创建数据库，必须用安装环境的用户名，否则会出现下面这种情况
 
@@ -292,9 +328,81 @@ psql 数据库名
 
 ![image-20220306222057449](assess/image-20220306222057449.png)
 
+解决重装Vmware出现无法安装服务“Vmware Authorization Service”( VmAuthdService)。请确保您有足够的权限安装系统服务。
+---
 
+![没错又是这个](assess/20200330170053995.png)
 
+```
+net stop VMAuthdService
+taskkill /F /IM mmc.exe
+sc delete VMAuthdService
 
+```
 
+![image-20220307161642218](assess/image-20220307161642218.png)
 
+出现1060就可以了
+
+Ubtuntu中nginx使用
+---
+
+安装
+
+```
+sudo apt install nginx
+```
+
+所有的 Nginx 配置文件都在`/etc/nginx/`目录下
+
+主要的 Nginx 配置文件是`/etc/nginx/nginx.conf`
+
+****
+
+Nginx **服务器配置文件**被储存在`/etc/nginx/sites-available`目录下。
+
+在`/etc/nginx/sites-enabled`目录下的配置文件都将被 Nginx 使用。最佳推荐是使用标准的命名方式。例如，如果你的域名是`mydomain.com`，那么配置文件应该被命名为`/etc/nginx/sites-available/mydomain.com.conf`
+
+****
+
+上面这种方法好像试过没有用，可能是我配置有问题
+
+![image-20220307163706341](assess/image-20220307163706341.png)
+
+下面这种方法证实可行
+
+```
+#进入conf.d文件，本来什么都没有
+#拷贝sites-enabled中的default文件到conf.d并且修改名字为**.conf,然后进行配置
+#或者新建文件，然后复制里面的内容进行修改,修改红框部分
+cd /etc/nginx/conf.d
+sudo gedit genui.conf 
+
+#最后重启服务器
+sudo nginx -s reload
+```
+
+![img](assess/FL2XOAYHU%7DQDRQ94WI00@%5BM.png)
+
+![1](assess/1-16466464698682.png)
+
+```
+server {
+    listen 8080;
+ 
+    server_name localhost;
+ 
+    root /root/project/vue_project/demo_01/hello_world/dist;
+ 
+    location / {
+        #try_files $uri $uri/ @router;
+        root /home/xyh/vmshare/vmshare/build;
+        index index.html index.htm;
+    }
+ 
+    #location @router {
+    #    rewrite ^.*$ /index.html last;
+    #}
+}
+```
 

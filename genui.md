@@ -48,7 +48,7 @@ python manage.py genuisetup
 python manage.py runserver # run the development server
 ```
 
-第一次启动服务器，需要运行 `migrate` 和 `genuisetup` 命令。`genuisetup` 命令检查当前安装的 GenUI 扩展并运行它们的设置方法。每次安装或更新扩展时都应该运行此命令。
+第一次启动服务器，需要运行 `migrate` 和 `genuisetup` 命令。`genuisetup` 命令检查当前安装的 GenUI 扩展并运行它们的设置方法。每次安装或更新扩展时都应该运行此命令。<u>执行migrate成功postgresql数据库必须是带有插件的rdkit-postgresql数据库，否则会报错。</u>
 
 如果一切顺利，现在应该可以从输出中显示的端口从 localhost 访问后端应用程序。如果服务器在端口8000上运行，你可以通过 http://localhost:8000/API/服务器来验证这一点，它将显示后端 REST API 文档。
 
