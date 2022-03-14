@@ -406,3 +406,11 @@ server {
 }
 ```
 
+给文件夹创建快捷方式
+
+```
+sudo ln -sT [文件夹路径] [快捷方式所在路径]
+sudo ln -sT /home/xyh/anaconda3/envs/genui/lib/python3.7/site-packages /home/xyh/env_sp/genui
+```
+
+![image-20220314221110328](assess/image-20220314221110328.png)![image-20220314221136272](assess/image-20220314221136272.png)

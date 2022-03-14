@@ -59,3 +59,126 @@ python manage.py runserver # run the development server
 一切顺利应该能看到下面这个界面
 
 ![img](assess/J_CSGSZ0SA1BR21%7B%7BS49H1O.png)
+
+打开后台接口的过程
+---
+
+### 先打开开启rdkit-postgresql数据库
+
+杀死占用5432端口(rdkit-postgresql需要使用的端口)的进程
+
+```
+sudo fuser -k -n tcp 5432
+```
+
+激活配置rdkit-postgresql数据库的环境
+
+```
+source activate genui
+```
+
+开启数据库，`rdkdata`是数据库数据文件目录
+
+```
+/home/xyh/anaconda3/envs/genui/bin/postgres -D rdkdata
+```
+
+<img src="assess/5RFHUIZFY4%5BW%25L6@B7F_1.png" alt="img" style="zoom:80%;" />
+
+### 开启后台接口
+
+首先激活后台环境
+
+```
+source activate genui
+```
+
+执行开启命令
+
+```python
+#进入src目录
+cd src/
+
+#使用debug模式
+export DJANGO_SETTINGS_MODULE=genui.settings.debug configuration
+
+
+"""
+第一次运行需要
+#初始化数据库
+python manage.py migrate 
+
+#安装 genui 扩展模块
+python manage.py genuisetup 
+"""
+
+#运行开发服务器
+python manage.py runserver # run the development server
+```
+
+ 如下显示则为成功![image-20220311141110860](assess/image-20220311141110860.png)
+
+
+
+### 使用Celery 工作线程来使用后台任务
+
+```
+cd src/
+export DJANGO_SETTINGS_MODULE=genui.settings.debug
+celery worker -A genui -Q celery,gpu --loglevel=info --hostname=debug-worker@%h
+```
+
+### 运行测试
+
+```
+export DJANGO_SETTINGS_MODULE=genui.settings.test
+python manage.py test
+```
+
+
+
+创建超级用户使用后台接口
+---
+
+```
+python manage.py createsuperuser
+```
+
+需要修改以下两个地方
+
+找到秘钥
+
+![image-20220311145410983](assess/image-20220311145410983.png)
+
+在manage.py文件中设置秘钥
+
+![](assess/1-16469815661581.png)
+
+如果不修改会报以下错误
+
+![](assess/3.png)
+
+**修改地址之后会找不到后台接口的静态布局文件，创建成功之后一定要记得改回来**
+
+修改
+
+![](assess/2-16469815827162.png)
+
+不修改会报以下的错误
+
+![](assess/4.png)
+
+执行成功如下
+
+![](assess/5.png)
+
+```
+
+xyh
+hdcq5683..
+
+```
+
+前端
+===
+
