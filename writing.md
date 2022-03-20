@@ -160,3 +160,22 @@ MolGPT包括堆叠的解码器块，每个解码器块都由一个掩蔽的自�
 
 
 
+
+
+David, L., Thakkar, A., Mercado, R. *et al.* Molecular representations in AI-driven drug discovery: a review and practical guide. *J Cheminform* **12,** 56 (2020). https://doi.org/10.1186/s13321-020-00460-5
+
+![image-20220315180213024](assess/image-20220315180213024.png)
+
+
+
+![image-20220315210403571](assess/image-20220315210403571.png)
+
+![image-20220316145742514](assess/image-20220316145742514.png)
+
+![image-20220316145748869](assess/image-20220316145748869.png)
+
+![image-20220316145758256](assess/image-20220316145758256.png)
+
+![image-20220316145823726](assess/image-20220316145823726.png)
+
+![image-20220316150058405](assess/image-20220316150058405.png)
