@@ -135,7 +135,31 @@ export DJANGO_SETTINGS_MODULE=genui.settings.test
 python manage.py test
 ```
 
+```
+#脚本运行
+#postsql-rdkit数据库启动
+#第一次设置
+chmod +x ./sqlrun.sh && ./sqlrun.sh
+#以后运行只需要，下面同理
+./sqlrun.sh
 
+#celery启动
+chmod +x ./celery.sh && ./celery.sh
+
+#服务器启动
+chmod +x ./guirun.sh && ./guirun.sh
+```
+
+如果自己增加扩展需要重新运行
+
+```
+python manage.py makemigrations
+python manage.py migrate
+```
+
+![image-20220327163104151](assess/image-20220327163104151.png)
+
+![image-20220327163142867](assess/image-20220327163142867.png)
 
 创建超级用户使用后台接口
 ---
@@ -179,6 +203,221 @@ hdcq5683..
 
 ```
 
+
+
+
+
 前端
 ===
+
+Proejct
+---
+
+### DashboardLayout.js
+
+> 首页组件是所有组件的父组件，定义左部导航栏等
+
+
+
+### ProjectCard.js
+
+![image-20220322133741645](assess/image-20220322133741645.png)
+
+### CreateNewCard.js
+
+![image-20220322134113225](assess/image-20220322134113225.png)
+
+### CreateNewForm.js
+
+![image-20220322134504064](assess/image-20220322134504064.png)
+
+### Projects.js
+
+![image-20220322134931572](assess/image-20220322134931572.png)
+
+Compounds
+---
+
+### Compounds.js
+
+> 整个Compounds的入口index,定义导入化合物集方式的xxxGrid.js文件。将实现传入`ComponentWithObjects.js`
+
+### ComponentWithObjects.js
+
+> 定义相关函数，并将相关函数和属性传入`CompoundsPage.js`进行渲染
+
+### CompoundsPage.js
+
+> 根据不同的choice添加不同的布局
+
+<img src="assess/image-20220322194738723.png" alt="image-20220322194738723" style="zoom:67%;" />
+
+
+
+### GenericNewMolSetForm.js
+
+> 所有创建化合物集的Name和Description的组件并拼接文件处理部分(不同类型的文件的`FormFields.js`)
+
+<img src="assess/image-20220322143714702.png" alt="image-20220322143714702" style="zoom:67%;" />
+
+### 创建csv
+
+#### csv/FormFields.js
+
+> 文件详细添加部分
+
+<img src="assess/image-20220322142334672.png" alt="image-20220322142334672" style="zoom:67%;" />
+
+#### CSVCardNew.js
+
+> 设置从创建csv文件中创建化合物集的参数，并不是视图。参数传入`GenericNewMolSetCard.js` 中
+
+<img src="assess/image-20220322143249135.png" alt="image-20220322143249135" style="zoom:67%;" />
+
+#### GenericNewMolSetCard.js
+
+> 里面有post表单数据的方法，然后将之前的`CSVCardNew.js`中的参数与post方法一起传入`NewMolSetFormRenderer.js`
+
+
+
+#### NewMolSetFormRenderer.js
+
+> 将`GenericNewMolSetForm.js`的布局与提交按钮Create结合，并实现数据提交至后台的功能
+
+<img src="assess/image-20220322140425000.png" alt="image-20220322140425000" style="zoom:67%;" />
+
+
+
+
+
+### CSV数据集可视化
+
+属性传递
+
+```
+App->DashboardLayout->Compounds->ComponentWithObjects->CompoundsPage
+```
+
+
+
+#### CSVCard.js
+
+> 主要设置视图中表格的内容，在compounds中调用`MolsInMolSetList.js`
+
+<img src="assess/image-20220322141028409.png" alt="image-20220322141028409" style="zoom:67%;" />
+
+#### MolsInMolSetList.js
+
+> 设置内容以及布局加载，将属性值传入CompoundListFromAPI.js
+
+```js
+return (
+    <Row>
+      <Col sm="12">
+        <h4>Molecules in {molset.name}</h4>
+        <CompoundListFromAPI
+          {...props}
+          activitySetsIDs={molset.activities}
+          showInfo={props.showInfo}
+          updateCondition={updateCondition}
+        />
+      </Col>
+    </Row>
+  );
+```
+
+<img src="assess/image-20220322141214280.png" alt="image-20220322141214280" style="zoom:67%;" />
+
+#### CompoundListFromAPI.js
+
+> 进行可视化，表格等渲染
+
+<img src="assess/image-20220322141818824.png" alt="image-20220322141818824" style="zoom: 67%;" />
+
+#### GenericMolSetCard.js
+
+> 整个主要界面
+
+<img src="assess/image-20220322141921743.png" alt="image-20220322141921743" style="zoom:67%;" />
+
+#### CompoundList.js
+
+> 定义Info,Activities,Properties的视图是否渲染，可以在这个更改需要展示的表格内容
+
+![image-20220323101323108](assess/image-20220323101323108.png)
+
+### 整体CSV数据集界面
+
+#### CSVGrid.js
+
+> 设置CSV文件的处理url,将属性参数传给`GenericMolSetGrid.js`进行视图渲染
+
+#### GenericMolSetGrid.js
+
+> 根据不同xxxxGrid.js传入的参数渲染界面，如果想只展示右边这个界面需要对这个js文件进行修改
+
+<img src="assess/image-20220322145354400.png" alt="image-20220322145354400" style="zoom:67%;" />
+
+为了只显示右边部分,修改如下
+
+```js
+{/*{*/}
+          {/*  [(*/}
+          {/*    <Card key={new_card.id} id={new_card.id}>*/}
+          {/*      <NewCardComponent {...this.props} handleCreateNew={this.props.handleAddMolSet}/>*/}
+          {/*    </Card>*/}
+          {/*  )].concat(existing_cards.map(*/}
+          {/*    item => (*/}
+          {/*      <Card key={item.id.toString()}>*/}
+          {/*        <CardComponent*/}
+          {/*          {...this.props}*/}
+          {/*          molset={item.data}*/}
+          {/*          onMolsetDelete={this.props.handleMolSetDelete}*/}
+          {/*        />*/}
+          {/*      </Card>*/}
+          {/*    )*/}
+          {/*  ))*/}
+          {/*}*/}
+          
+          {
+            [(
+              <Card key={existing_cards.id.toString()}>
+                <CardComponent
+                  {...this.props}
+                  molset={existing_cards.data}
+                  onMolsetDelete={this.props.handleMolSetDelete}
+                />
+              </Card>
+            )]
+          }
+```
+
+
+
+Map
+---
+
+### ModelCardNew.js
+
+> 根据MapCreateCard.js传来的属性
+
+### ModelInfo.js
+
+> 显示分子地图实现模型的细节
+
+![image-20220323131359691](assess/image-20220323131359691.png)
+
+### MapFormFields.js
+
+> 定义以下两个部分函数组件
+
+<img src="assess/image-20220323132259185.png" alt="image-20220323132259185" style="zoom:67%;" />
+
+
+
+### ModelCard.js
+
+> 整体框图
+
+![image-20220323130906247](assess/image-20220323130906247.png)
 

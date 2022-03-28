@@ -44,7 +44,7 @@ sz xxx
 服务器如何更换密码
 
 ```
-password xyh(用户名)
+passwod xyh(用户名)
 ```
 
 ![image-20220126204947919](assess/image-20220126204947919.png)
@@ -66,6 +66,13 @@ mv A B #将文件A重命名为B
 ```
 #解压到当前文件夹
 unzip xxx.zip
+```
+
+压缩文件夹
+
+```
+#zip -r 压缩后文件 需要压缩的文件夹名
+zip -r genui.zip genui
 ```
 
 
@@ -431,7 +438,39 @@ kill -9 进程号
 
 
 
+运行项目中的单个python文件时，需要给文件加上绝对路径否则会出现找不到文件的报错
+
+![image-20220325220250825](assess/image-20220325220250825.png)
+
+运行单个文件出现找不到自己写的文件
+
+![image-20220325223204734](assess/image-20220325223204734.png)
+
+解决方法，寻找到根目录并添加进环境中
+
+```python
+import sys
+import os
+import django
+# 寻找项目根目录，os.path.dirname要写多少个根据要运行的python文件到根目录的层数决定
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(BASE_DIR)
 
 
+```
 
+项目结构
 
+![image-20220325224117203](assess/image-20220325224117203.png)
+
+运行命令
+
+```
+python /mnt/xyh/project/genui/src/genui/utils/inspection.py
+```
+
+单独运行Django项目中的单个文件依然会报错，所以需要在运行该文件之前加载Django项目的配置
+
+![image-20220325224305304](assess/image-20220325224305304.png)
+
+![image-20220325230730110](assess/image-20220325230730110.png)

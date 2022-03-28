@@ -3323,6 +3323,132 @@ for i in range(10):
 Python方法
 ===
 
+内置库
+---
+
+### inspect
+
+> inspect模块主要提供了四种用处：
+>
+> (1).对是否是模块，框架，函数等进行类型检查。
+>
+> (2).获取源码
+>
+> (3).获取类或函数的参数的信息
+>
+> (4).解析堆栈
+
+```python
+import torch
+from torch_geometric.nn import radius_graph
+import inspect
+
+def getFullName(obj, moduleOnly=False):
+    module = inspect.getmodule(obj) #返回模块的对象
+    print(module.__name__)
+    print(obj.__name__)
+    if module is None or module == str.__class__.__module__:
+        return obj.__name__ if not moduleOnly else None
+    else:
+        """
+        module.__name__ 模块的名字
+        
+        例如 import inspect as m
+        m.__name__ = inspect
+        """
+        return module.__name__ + '.' + obj.__name__ if not moduleOnly else module.__name__
+
+getFullName(radius_graph)
+```
+
+![image-20220323224558900](assess/image-20220323224558900.png)
+
+importlib
+---
+
+### import_module()
+
+> 动态导入对象
+
+```python
+def discover_extensions(packages):
+    """
+
+    Parameters
+    ----------
+    packages=[
+    'genui.extensions',
+    'genui.utils.extensions',
+    'genui.accounts.extensions',
+    'genui.projects.extensions',
+    'genui.compounds.extensions',
+    'genui.models.extensions',
+    'genui.qsar.extensions',
+    'genui.generators.extensions',
+    'genui.maps.extensions'
+    ]
+
+    Returns
+    -------
+    ret=[
+    ...,
+    genui.compounds.extensions.chembl,
+    genui.compounds.extensions.generated,
+    genui.compounds.extensions.sdf,
+    genui.compounds.extensions.csvimports,
+    genui.compounds.extensions.molcsvimports,
+    ...
+    ]
+    """
+    ret = []
+    for package_name in packages:
+        try:
+            #动态导入包
+            package = importlib.import_module(package_name)
+        except ModuleNotFoundError as exp:
+            sys.stderr.write(f"WARNING: Failed to find extensions module: {package_name}. Skipping...\n")
+            continue
+        # package.__all__是每个extension文件夹下__init__.py中的__all__
+        subs = package.__all__
+        for sub in subs:
+            ret.append(f"{package_name}.{sub}")
+    return ret
+
+```
+
+![image-20220326105930406](assess/image-20220326105930406.png)
+
+`\__int__.py`内容如下
+
+![image-20220326105955037](assess/image-20220326105955037.png)
+
+typing
+---
+
+
+
+dir()
+---
+
+> dir() 函数不带参数时，返回当前范围内的变量、方法和定义的类型列表；
+>
+> 带参数时，返回参数的属性、方法列表。
+>
+> 如果参数包含方法__dir__()，该方法将被调用。如果参数不包含__dir__()，该方法将最大限度地收集参数信息。
+>
+> `str.startswith(str, beg=0,end=len(string));`
+
+```
+
+```
+
+
+
+startwith()
+---
+
+> 检查字符串是否是以指定子字符串开头，如果是则返回 True，否则返回 False。如果参数 beg 和 end 指定值，则在指定范围内检查。
+
 *args和**kwargs
 ---
 
@@ -3386,6 +3512,184 @@ fun_args(**mykwargs)
 #arg3: None
 ```
 
+@classmethod
+---
+
+> 类方法，属于**静态方法**，不需要实例化，也不需要self参数，需要一个cls参数，**可以用类名调用，也可以用对象来调用**。
+>
+> **cls参数表示为当前类的对象**
+
+```python
+class A():
+    # 类的属性
+    x = 1
+
+    @classmethod
+    def get_name(cls, name):
+        print(cls.x)  
+        print('my name is %s' % name)
+
+    @staticmethod
+    def get_age(age):
+        print(A.x)
+        print(f'i am %s years old' % age)
+
+if __name__ == '__main__':
+    A.get_name('Runsen')  
+    A.get_age(20)
+    
+    # 实例对象同样运行
+    a = A()
+    a.get_name('Runsen')
+    a.get_age(20)
+
+>>>
+1
+my name is Runsen
+1
+i am 20 years old
+1
+my name is Runsen
+1
+i am 20 years old
+```
+
+@staticmethod
+---
+
+> 普通的类内函数是需要实例化之后才可以调用的，但是 `@staticmethod` 静态方法无需实例化也可直接调用
+>
+> 没有`self`和`cls`参数
+
+```python
+class cal:
+    def __init__(self,x,y):
+        self.x = x
+        self.y = y
+
+    @staticmethod       #静态方法 类或实例均可调用
+    def cal_test(a,b,c): #改静态方法函数里不传入self 或 cls
+        print(a,b,c)
+
+# 实例化
+c1 = cal(10,11)
+c1.cal_test(1,2,3)      #>>> 1 2 3
+# 静态方法无需实例化也可直接调用
+cal.cal_test(1,2,3)     #>>> 1 2 3
+
+```
+
+
+
+@property
+---
+
+> 属性方法，主要作用是将一个操作方法封装成一个**属性**,用户用起来就和操作普通属性完全一致
+>
+> @property装饰器会将方法转换为相同名称的**只读属性**
+
+```python
+class DataSet(object):
+  @property
+  def method_with_property(self): ##含有@property
+      return 15
+  def method_without_property(self): ##不含@property
+      return 15
+
+l = DataSet()
+print(l.method_with_property) # 加了@property后，可以用调用属性的形式来调用方法,后面不需要加（）。
+print(l.method_without_property())  #没有加@property , 必须使用正常的调用方法的形式，即在后面加()
+
+```
+
+@abstractmethod
+---
+
+> 由于python 没有抽象类、接口的概念，所以要实现这种功能得`abc.py` 这个类库
+
+使用 @abstractmethod 抽象方法:
+
+1. 所在的 class 继承 `abc.ABC`
+2. 给需要抽象的实例方法添加装饰器 `@abstractmethod`
+
+**抽象基类不能被直接实例化**, 要想使用抽象类, 必须继承该类并实现该类的所有抽象方法
+
+```python
+from abc import ABC, abstractmethod
+from typing import Iterable
+
+class FileParser(ABC):
+
+    def __init__(self, file, molset):
+        self.molset = molset
+        self.file = file
+        self.path = file.path
+
+    @abstractmethod
+    def parse(self) -> Iterable[tuple]:
+        pass
+```
+
+```python
+"""
+parser
+
+Created by: Martin Sicho
+On: 7/16/20, 2:17 PM
+"""
+from genui.compounds.extensions.fileimports.parser import FileParser
+import pandas
+
+class MolCSVParser(FileParser):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.counter = 0
+
+    def processRow(self, row):
+        self.counter += 1
+        smiles = row[self.molset.smilesCol]
+        return smiles
+
+
+    def parse(self):
+        """
+        读文件并按照processRow方法处理数据
+        Returns
+        -------
+        """
+        df = pandas.read_csv(
+            self.path,
+            sep=self.molset.colSeparator,
+            header=0,
+            na_values=('', self.molset.emptyValue),
+            keep_default_na=True
+        )
+
+        # TODO: this should be changed for something more efficient: https://stackoverflow.com/a/55557758
+        return df.apply(self.processRow, axis=1).tolist()
+
+
+```
+
+
+
+dict使用
+---
+
+### get()
+
+> dict.get(key[, value]) 
+
+- key -- 字典中要查找的键。
+- value -- 可选，如果指定键的值不存在时，返回该默认值。
+
+```
+
+```
+
+
+
 （**dict）
 ---
 
@@ -3440,6 +3744,33 @@ hasattr()
 ```python
 hasattr(out, "toarray")#如果对象有该属性返回 True，否则返回 False
 ```
+
+getattr()
+---
+
+> **getattr(object, name)** 函数用于获取对象包含的name属性
+
+- object--对象
+- name--字符串，属性名
+
+```
+
+```
+
+setattr()
+---
+
+> **setattr(object, name,val)** 函数用于设置对象包含的name属性
+
+- object--对象
+- name--字符串，属性名
+- var--属性名的值
+
+```
+
+```
+
+
 
 extend()
 ---
@@ -3849,6 +4180,62 @@ l
 ```
 
 ![image-20220205202521873](assess/image-20220205202521873.png)
+
+
+
+call方法
+---
+
+> 该方法的功能类似于在类中重载 () 运算符，使得类实例对象可以像调用普通函数那样，以“对象名()”的形式使用。
+
+```python
+class Person(object):
+  def __init__(self, name, gender):
+    self.name = name
+    self.gender = gender
+
+  def __call__(self, friend):
+    print 'My name is %s...' % self.name
+    print 'My friend is %s...' % friend
+
+
+>>> p = Person('Bob', 'male')
+>>> p('Tim')
+My name is Bob...
+My friend is Tim...
+    
+class Standardizer(ABC):
+
+    @abstractmethod
+    #mol : Chem.Mol参数提示
+    def __call__(self, mol : Chem.Mol):
+        pass    
+```
+
+内部类
+---
+
+> [内部类](https://so.csdn.net/so/search?q=内部类&spm=1001.2101.3001.7020)就是在一个类的定义中嵌套了另一个类的定义。内部类相当于外部类的一个属性。
+
+```python
+class A(object):
+    def __init__(self,name):
+        self.name=name
+    def __str__(self):
+        return 'This is a sample of Class A'
+    class B(object):
+        def __init__(self,name):
+            self.name=name
+        def __str__(self):
+            return "This is a sample of Class B"
+if __name__=="__main__":
+    a=A("hello")
+    print(a)
+    b=a.B("world")
+    print(b)
+```
+
+
 
 PyG框架
 ===
@@ -4350,5 +4737,49 @@ python manage.py start myapp
 
 ```
 python manage.py creatsuperuser
+```
+
+queryset过滤
+---
+
+### filter()
+
+> 表示`'='`
+
+```python
+queryset = model.objects.all() 
+
+condtions: {'date__lt': '2018-05-22'}
+
+query_res = queryset.filter(**condtions)
+```
+
+### exclude()
+
+> 表示`!=`
+
+### distince()
+
+> 表示去重
+
+```
+__exact 精确等于 like 'aaa'
+__iexact 精确等于 忽略大小写 ilike 'aaa'
+__contains 包含 like '%aaa%'
+__icontains 包含 忽略大小写 ilike '%aaa%'，但是对于sqlite来说，contains的作用效果等同于icontains。
+__gt 大于
+__gte 大于等于
+__lt 小于
+__lte 小于等于
+__in 存在于一个list范围内
+__startswith 以...开头
+__istartswith 以...开头 忽略大小写
+__endswith 以...结尾
+__iendswith 以...结尾，忽略大小写
+__range 在...范围内
+__year 日期字段的年份
+__month 日期字段的月份
+__day 日期字段的日
+__isnull=True/False
 ```
 

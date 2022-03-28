@@ -57,7 +57,7 @@ service nginx start
 clear
 ```
 
-解压tar.gz文件
+### 解压tar.gz文件
 
 ```
  #解压到当前
@@ -66,7 +66,7 @@ clear
  tar  -zxvf  fenci.py.tar.gz  -C  pythontab/
 ```
 
-tar文件
+### tar文件
 
 ```
 #解压
@@ -75,13 +75,13 @@ tar xvf FileName.tar
 tar cvf FileName.tarsu
 ```
 
-解压.gz文件
+### 解压.gz文件
 
 ```
 gunzip -d pythontab.gz
 ```
 
-查询某个端口是否被占用，再执行
+### 查询某个端口是否被占用，再执行
 
 ```
 #如何没有安装先安装一下
@@ -94,7 +94,7 @@ netstat  -anp  |grep 端口号
 
 ![image-20220306213947401](assess/image-20220306213947401.png)
 
-杀死某个端口的进程
+### 杀死某个端口的进程
 
 ```
 sudo fuser -k -n tcp 80
@@ -102,7 +102,7 @@ sudo fuser -k -n tcp 80
 
 ![img](assess/WH%25CJKKKCX8ZWHF%7D_NE6UVM.png)
 
-查看虚拟机的IP地址
+### 查看虚拟机的IP地址
 
 ```
 ifconfig
@@ -112,11 +112,48 @@ ifconfig
 
 方框内的就是虚拟机的IP地址
 
-给文件重命名
+### 创建.sh文件
 
 ```
+touch xxx.sh
+gedit xxx.sh
+```
+
+第一行必须是`#!/bin/bash`
+
+```sh
+#!/bin/bash
+ 
+cd ~/vmshare/vmshare/genui/src
+source activate genui
+export DJANGO_SETTINGS_MODULE=genui.settings.debug configuration
+python manage.py runserver # run the development server
+
+ 
+sh pycharm.sh
+```
+
+```shell
+#运行sh脚本sudo自动输入密码
+sudo fuser -k -n tcp 5432 << EOF
+hdcq5683..
+EOF
+source activate genui
+/home/xyh/anaconda3/envs/genui/bin/postgres -D rdkdata
+```
+
+#### 运行
 
 ```
+cd 到相应目录：
+chmod +x ./test.sh  #使脚本具有执行权限
+./test.sh  #执行脚本
+
+#一行命令执行方式
+chmod +x ./test.sh && ./test.sh 
+```
+
+
 
 
 
