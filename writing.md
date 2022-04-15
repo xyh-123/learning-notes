@@ -179,3 +179,100 @@ David, L., Thakkar, A., Mercado, R. *et al.* Molecular representations in AI-dri
 ![image-20220316145823726](assess/image-20220316145823726.png)
 
 ![image-20220316150058405](assess/image-20220316150058405.png)
+
+
+
+
+
+
+
+
+
+Molecular design in drug discovery: a comprehensive review of deep generative models
+
+<img src="assess/image-20220408104458324.png" alt="image-20220408104458324" style="zoom:67%;" />
+
+VAE
+
+Chemical VAE(2016)
+
+将分子的离散表示转换为多维连续表示。**该模型包含三个部分，编码器、解码器和预测器。**<u>编码器将分子的离散表示转换为实值连续向量，解码器将这些连续向量转换回离散分子表示。预报器根据分子的潜在连续矢量表示来估计化学性质。</u>
+
+
+
+Graph VAE
+
+GraphVAE: Towards Generation of Small Graphs Using Variational
+Autoencoders
+
+然而，对于基于梯度优化的方法来说，学习生成图是一个困难的问题，因为图是离散结构。与序列(文本)生成不同，图形可以具有任意连通性，并且没有明确的最佳方法来线性化它们在一系列步骤中的构造。另一方面，学习增量构建的顺序涉及到离散的决策，这些决策是不可区分的。
+
+
+
+RNN
+
+Segler等人[],建立基于RNN的三层LSTM层叠生成模型，并将其与迁移学习相结合，在低数据量条件下生成对金黄色葡萄球菌和疟疾具有活性的分子。
+
+Segler, M. H., Kogej, T., Tyrchan, C., & Waller, M. P. (2018a). Generating focused
+
+molecule libraries for drug discovery with recurrent neural networks. ACS
+
+central science, 4(1), 120-131.
+
+
+
+An In-depth Summary of Recent Artificial Intelligence Applications in Drug Design 
+
+
+
+GAN 
+
+于2014年提出，是一种能够隐式学习真实训练数据分布的无似然生成模型。一个基本的GAN由一个发生器和一个鉴别器组成
+
+Goodfellow, I., Pouget-Abadie, J., Mirza, M., Xu, B., Warde-Farley, D., Ozair, S., ...
+& Bengio, Y. (2014). Generative adversarial nets. Advances in neural information
+processing systems, 27.
+
+![image-20220408153909543](assess/image-20220408153909543.png)
+
+
+
+OGRAN
+
+Guimaraes, G.L., Sánchez-Lengeling, B., Farias, P.L., & Aspuru-Guzik, A. (2017). Objective-Reinforced Generative Adversarial Networks (ORGAN) for Sequence Generation Models. *ArXiv, abs/1705.10843*.
+
+LatentGAN
+
+Bjerrum, E.J. (2018). Improving Chemical Autoencoder Latent Space and Molecular De Novo Generation Diversity with Heteroencoders. *Biomolecules, 8*.
+
+保持分子相似性的一个好处是模拟了药物开发中实际的先导优化过程。
+
+ML和AI在药物发现中的作用越来越大，人们对新分子设计方法的兴趣也在增长，因为它们能够比VS或人类专家更有效地在极大的化学空间中导航。尽管早期人们对分子设计的自动化方法的使用感到担忧，通常与所建议的分子的不稳定性、反应性、可操作性和合成可行性有关，68我们现在有各种各样的工具可供我们使用，它们是灵敏分子结构的熟练生成器。
+
+
+
+Generative AI Models for Drug Discovery
+
+[]Tang, B., Ewalt, J.A., & Ng, H. (2021). Generative AI Models for Drug Discovery. *Biophysical and Computational Tools in Drug Discovery*.
+
+**SMILES的不唯一性源于对SMILES串构造的起始原子的模棱两可，这意味着每个具有N个非氢原子的分子可以至少有N个等价的SMILES串表示。**相同的分子结构可以转化成许多独特的SMILES串.
+
+**对于一些RNN分子生成模型，他们可能只学习SMILES语法的规则，而不是分子结构的知识[32]**。
+
+**SMILES或其他字符串表示不是为了捕捉分子相似性而设计的，所以具有相似化学结构的分子可以被编码成非常不同的SMILES字符串(参见图3)。**同样的分子结构也可以转化成许多不同的、独特的SMILES串
+
+![image-20220410214407411](assess/image-20220410214407411.png)
+
+**即使是语法有效的字符串也可能不能编码化学上有效的分子**。
+
+
+
+
+
+
+
+数据集
+
+FCD被设计成将有效性、化学和生物意义包含在一个分数中。FCD计算现实世界分子分布和生成模型产生的分子分布之间的距离。计算真实世界分子分布和生成模型中分子分布的平均值和协方差。然后使用Fréchet distance对这两个分布进行比较。
+
+根据有效性、独特性、新颖性、FCD和KL散度来评估分布学习模型。有效性是对生成的分子是否真实的评估

@@ -75,6 +75,28 @@ unzip xxx.zip
 zip -r genui.zip genui
 ```
 
+vim
+---
+
+### 注释
+
+按CTRL+V进入可视化模式
+移动光标上移或者下移，选中多行的开头，如下图所示
+
+![在这里插入图片描述](assess/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzk0NDMwNQ==,size_16,color_FFFFFF,t_70.png)
+
+选择完毕后，按大写的的I键，此时下方会提示进入“[insert](https://so.csdn.net/so/search?q=insert&spm=1001.2101.3001.7020)”模式，输入你要插入的注释符，例如注释符号`#`
+
+![在这里插入图片描述](assess/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzk0NDMwNQ==,size_16,color_FFFFFF,t_70-16490389372394.png)
+
+最后按ESC键
+
+### 去掉多行注释
+
+- `vi/vim`进入命令行模式，按`ctrl + v`进入`visual block`模式，按小写字母`l`横向选中列的个数，例如 `//` 需要选中2列
+- 按小写字母`j`，或者`k`选中注释符号
+- 按`d`键就可全部取消注释
+
 
 
 服务器上如何安装anaconda
@@ -175,7 +197,9 @@ nvidia-smi
 stat filename
 ```
 
-![image-20220217111912851](assess/image-20220217111912851.png)Access Time：简写为atime，表示文件的访问时间。当文件内容被访问时，更新这个时间 
+![image-20220217111912851](assess/image-20220217111912851.png)
+
+Access Time：简写为atime，表示文件的访问时间。当文件内容被访问时，更新这个时间 
 
 Modify Time：简写为mtime，表示文件内容的修改时间，当文件的数据内容被修改时，更新这个时间。 
 
@@ -410,16 +434,45 @@ telnet ip 端口
 将代码在服务器后台运行
 ---
 
+（1）nohup 不挂起的意思。
+（2）**-u 代表程序不启用缓存，也就是把输出直接放到log中，没这个参数的话，log文件的生成会有延迟。**
+（3）> train.log 将输出日志保存到这个log中。
+（4）2>1 2与>结合代表错误重定向，而1则代表错误重定向到一个文件1，而不代表标准输出；
+2>&1 &与1结合就代表标准输出了，就变成错误重定向到标准输出。
+（5） 最后一个& ，代表该命令在后台执行。
+
+
+
 输出将会写入map.log文件中
 
 ```
 nohup python -u map.py --run_name moses  > map.log 2>&1 &
 ```
 
+运行脚本
+
+```bash
+#脚本
+!
+python -u../sf/train.py --run_name sf_moses_ga --max_len 55 --data_name moses --learning_rate 6e-4 --batch_size 384 --num_props 0 --max_epochs 10 --n_layer 8 --n_embd 512 --generate True
+```
+
+
+
+```
+CUDA_VISIBLE_DEVICES=1  nohup bash sf_train_moses.sh > moses_ga.log 2>&1 &
+```
+
+![image-20220413224539551](assess/image-20220413224539551.png)
+
+![image-20220413224621830](assess/image-20220413224621830.png)
+
+
+
 查看后台任务
 
 ```
-ps -aux | grep "map.py"
+ps -aux | grep "tr.py"
 ```
 
 ![image-20220316165347772](assess/image-20220316165347772.png)
@@ -474,3 +527,45 @@ python /mnt/xyh/project/genui/src/genui/utils/inspection.py
 ![image-20220325224305304](assess/image-20220325224305304.png)
 
 ![image-20220325230730110](assess/image-20220325230730110.png)
+
+在服务器上运行代码指定GPU
+---
+
+> CUDA_VISIBLE_DEVICES设置可用显
+
+### 在代码中直接指定
+
+```
+import os 
+#使用编号为1的GPU
+os.environ['CUDA_VISIBLE_DEVICES'] = 1 
+```
+
+###  在命令行中执行代码时指定
+
+```
+CUDA_VISIBLE_DEVICES=gpu_ids python3 train.py
+```
+
+### 用sh脚本文件运行代码
+
+#### 在命令行中执行脚本文件时指定
+
+```
+CUDA_VISIBLE_DEVICES=1 bash sf_train_moses.sh
+```
+
+#### 在脚本中指定
+
+```bash
+!CUDA_VISIBLE_DEVICES=0 python ../sf/train.py --run_name sf_moses_ga --max_len 55 --data_name moses --learning_rate 6e-4 --batch_size 384 --num_props 0 --max_epochs 10 --n_layer 8 --n_embd 512 --generate True
+```
+
+
+
+
+
+
+
+
+

@@ -2086,11 +2086,53 @@ os.path.basename(path)=CSDN   #返回路径最后的文件
 
 ### osp.abspath()
 
+> 返回绝对路径
+
 ```python
 import os
 print(os.path.abspath(".")#当前目录的绝对路径
 print(os.path.abspath(r".."))#上级目录的绝对路径
 ```
+
+os.getcwd()
+---
+
+> 查看当前工作目录
+
+os.chdir()
+---
+
+> os.chdir() 方法用于改变当前工作目录到指定的路径。当遇到读取文件时路径正确但是依然显示文件不存在时需要改变当前工作目录。
+
+![image-20220409182922504](assess/image-20220409182922504.png)
+
+```
+path="../../../files/media_debug/compounds/sets/files/gen_moses...df.csv"
+data = pd.read_csv(path)
+#可能会出现
+
+```
+
+![image-20220409183649897](assess/image-20220409183649897.png)
+
+```
+#就可以了
+os.chdir("../../../files/media_debug/compounds/sets/files")
+data = pd.read_csv("./gen_moses...df.csv")
+```
+
+os.listdir()
+---
+
+> 返回路径下的所有文件名
+
+```
+#返回当前路径下所有文件名
+path_list = os.listdir("./")
+print(path_list)
+```
+
+![image-20220409184022797](assess/image-20220409184022797.png)
 
 collections
 ===
@@ -2272,6 +2314,10 @@ read_csv()
 - memory_map如果为filepath_or_buffer提供了文件路径，则将文件对象直接映射到内存上，并直接从那里访问数据。使用此选项可以提高性能，因为不再有任何I / O开销。
 
 - low_memory 默认为True 在块内部处理文件，导致分析时内存使用量降低，但可能数据类型混乱。要确保没有混合类型设置为False，或者使用dtype参数指定类型。请注意，不管怎样，整个文件都读入单个DataFrame中，请使用chunksize或iterator参数以块形式返回数据。 （仅在C语法分析器中有效）
+
+- `float_precision`读文件时很多小数都变成了超长位数的精确小数时需要设置这个参数为`'round_trip'`，就可以读出与文件相同位数的小数
+
+  ![image-20220331165004427](assess/image-20220331165004427.png)
 
 
 ```python
@@ -2459,6 +2505,37 @@ data['selfies'] = data.apply(lambda x: smiles(x['smiles']),axis=1)
 data.to_csv('datasets/moses3.csv')#结果另外保存，否则原数据集不会改变
 ```
 
+concat
+---
+
+> 对DataFrame进行数据拼接
+
+```python
+import pandas as pd
+df = pd.read_csv('C:/Users/xyh/Desktop/moses_eva.csv',float_precision='round_trip')
+df
+```
+
+<img src="assess/image-20220407163448911.png" alt="image-20220407163448911" style="zoom:67%;" />
+
+```python
+mol_dit= {
+'models':"test",
+"validity":1.0,
+"uniques@10k":0.999,
+"novelty":0.825,
+"IntDiv1":0.885,
+"IntDiv2":0.886,
+"FCD/Test":0.956,
+"FCD/TestSF":0.132}
+#result=pd.DataFrame(mol_dit)报错
+result=pd.DataFrame([mol_dit])#必须是[dict1,dict2,...]
+moses_eva=pd.concat([df,result])#默认按行拼接
+moses_eva.to_csv('C:/Users/xyh/Desktop/moses_eva.csv',index = False)#需要重新写回
+```
+
+<img src="assess/image-20220407163603813.png" alt="image-20220407163603813" style="zoom:67%;" />
+
 map()
 ---
 
@@ -2494,6 +2571,260 @@ df.applymap(lambda x:"%.2f" % x)
 ```
 
 ![img](assess/v2-d90bd5f9a7bdbbf811063df36c9b3720_1440w.jpg)
+
+选取某行某列的值
+---
+
+### loc
+
+> loc方法是通过行、列的**名称**或者**标签**(index)来寻找我们需要的值。`可以根据具体的列名来筛选`，
+>
+> **列**<u>不可以</u>根据整数索引进行筛选
+
+二维，先行后列
+**行维度：**
+标签索引、标签切片、标签列表、<布尔数组>、Callable
+**列维度：**
+标签索引、标签切片、标签列表、<布尔数组>、Callable
+
+<img src="assess/image-20220407171815905.png" alt="image-20220407171815905" style="zoom:67%;" />
+
+
+
+```python
+#条件筛选切片操作
+df.loc[df.models=="test",["validity","novelty"]]
+```
+
+![image-20220407184925524](assess/image-20220407184925524.png)
+
+```python
+#返回index的值等于1:3的行的vmodels"到"novelty"之间的值，不是1:2
+#
+df.loc[1:3,"models":"novelty"]
+
+#报错
+#df.loc[df.models=="test",0:3]
+```
+
+![image-20220407194421630](assess/image-20220407194421630.png)
+
+```python
+#
+df.iloc[1:3,0:3]
+```
+
+![image-20220407194512928](assess/image-20220407194512928.png)
+
+```
+#选取某几列
+df.loc[:,"validity":"novelty"]
+```
+
+![image-20220407172427265](assess/image-20220407172427265.png)
+
+### iloc
+
+> iloc方法是通过索引行、列的索引位置[index, columns]来寻找值。`不能根据具体的列名来查找`
+
+行维度：
+整数索引、整数切片、整数列表、<布尔数组>
+列维度：
+整数索引、整数切片、整数列表、<布尔数组>、Callable
+
+```python
+#bool数组必须与行数一致，否则报错
+df.iloc[[True,True,True,False,False,False,True,True], :] 
+```
+
+![image-20220407194827665](assess/image-20220407194827665.png)
+
+```python
+#但是条件筛选就报错
+df.iloc[df.models=="test",1:3]
+```
+
+![image-20220407194920560](assess/image-20220407194920560.png)
+
+### at
+
+> 精确定位单元格取值
+
+行维度：**标签索引**
+列维度：**标签索引**
+
+```
+#df.at[行索引,列名]
+df.at[7,"validity"]
+>>>1.0
+
+#不能根据条件取值
+#df.at[df.models=="test","validity"]报错
+```
+
+### iat
+
+> 精确定位单元格取值
+
+行维度：**整数索引**
+列维度：**整数索引**
+
+```
+df.iat[7,0]
+>>>'test'
+
+#报错
+#df.iat[7,"models"]
+```
+
+
+
+### 根据条件选取具体的值
+
+#### 根据条件选取具体的行
+
+```python
+df[df["models"]=="test"]
+df[df.models=="test"]
+```
+
+![image-20220407171849099](assess/image-20220407171849099.png)
+
+#### 选取确定行确定列的值
+
+```python
+#选取某行具体的值
+df=df[df["models"]=="test"]
+df["validity"]
+```
+
+![image-20220407172557672](assess/image-20220407172557672.png)
+
+```python
+l=df.loc[df.models=="test","validity"]
+type(l),l
+```
+
+![image-20220407191441880](assess/image-20220407191441880.png)
+
+```python
+l.values[0]
+>>>1.0
+```
+
+将DataFrame数据转变成list
+---
+
+```
+df = pd.read_csv('C:/Users/xyh/Desktop/moses_eva.csv',float_precision='round_trip')
+df
+```
+
+<img src="assess/image-20220409154755073.png" alt="image-20220409154755073" style="zoom:67%;" />
+
+```
+x_data = df['models']
+type(x_data)
+```
+
+![image-20220409154808701](assess/image-20220409154808701.png)
+
+```python
+x_data = df['models'].tolist()
+print(x_data)
+x_data = x_data[:6].append("test")
+#很神奇居然是None
+print(x_data)
+```
+
+![image-20220409155150687](assess/image-20220409155150687.png)
+
+```python
+x_data = df['models'].tolist()
+x_data = x_data[:6]
+print(x_data)
+x_data=x_data.append("test")
+#依然是None
+print(x_data)
+```
+
+![image-20220409155340050](assess/image-20220409155340050.png)
+
+```python
+#正确的写法
+x_data = df['models'].tolist()
+x_data = x_data[:6]
+print(x_data)
+x_data.append("test")
+print(x_data)
+```
+
+![image-20220409155438414](assess/image-20220409155438414.png)
+
+drop
+---
+
+> 用于数据清洗时删除满足条件的元素
+>
+> `drop(labels=None, axis=0, index=None, columns=None,level=None, inplace=False, errors='raise')`
+
+labels：一个字符或者数值，加上axis ，表示带label标识的行或者列；如 (labels='A', axis=1) 表示A列
+
+axis：axis=0表示行，axis=1表示列
+
+columns：列名
+
+index：表示dataframe的index, 如index=1, index=a
+
+`inplace`：True表示删除某行后原dataframe变化，False不改变原始dataframe
+
+### 根据条件删除行
+
+```python
+df=pd.read_csv('C:/Users/xyh/Desktop/TestMoses.csv')
+data = df.sample(n = 500, random_state = 42).reset_index(drop = True)
+
+#train_set=set(data['smiles'])也可以
+train_set=data['smiles'].tolist()
+
+#要使用isin
+#df[df['smiles'] in train_set].index，报错
+index=df[df['smiles'].isin(train_set)].index
+
+df.drop(index,inplace=True)
+df.to_csv('C:/Users/xyh/Desktop/novelty.csv',index=False)
+```
+
+
+
+drop_duplicates()——去重
+---
+
+keep：{‘first’, ‘last’, False}, 默认值 ‘first’
+
+- first：保留第一次出现的重复行，删除后面的重复行。
+- last：删除前面的重复项，保留最后一次出现的重复行。
+- False：删除所有重复项
+
+### 删除完全重复的行
+
+```python
+df.drop_duplicates()
+```
+
+### 按照某一列进行出重，只保留第一个出现的值
+
+```python
+df.drop_duplicates(列名,keep='first')
+```
+
+### 按照多列去重
+
+```python
+df.drop_duplicates([列名1,列名2],keep='first')
+```
+
+
 
 argparse
 ===
@@ -3305,7 +3636,17 @@ for i in range(10):
 >>>[N+] [N+] [N] [N] [C] [C] [N] [N+] [F] [N+]    
 ```
 
+sample()
+---
 
+> 从某个范围内随机抽样n个**不重复**的数
+
+```python
+index=random.sample(range(0,9),5)
+print(index)
+```
+
+![image-20220413152553110](assess/image-20220413152553110.png)
 
 choice()
 ---
@@ -3942,6 +4283,32 @@ c.tolist()  # [[1, 2, 3], [0, 9, 8, 0]]
 
 ```
 
+reversed()
+---
+
+> reversed 函数返回一个反转的**迭代器**。
+
+```python
+# 字符串
+seqString = 'Runoob'
+print(list(reversed(seqString)))
+ 
+# 元组
+seqTuple = ('R', 'u', 'n', 'o', 'o', 'b')
+print(list(reversed(seqTuple)))
+ 
+# range
+seqRange = range(5, 9)
+print(list(reversed(seqRange)))
+ 
+# 列表
+seqList = [1, 2, 4, 3, 5]
+print(list(reversed(seqList)))
+
+#可直接用于循环迭代器
+for i in reversed(seqList):
+```
+
 
 
 切片操作
@@ -4165,6 +4532,25 @@ assert t <= self.block_size, "Cannot forward, model block size is exhausted."
 list操作
 ---
 
+### sort()
+
+> list.sort(cmp=None, key=None, reverse=False)
+
+reverse -- 排序规则，reverse = True 降序， reverse = False 升序（默认）。
+
+```python
+index=random.sample(range(0,9),5)
+#index=index.sort(reverse=True),输出None,但是index已经改变
+index.sort(reverse=True)
+print(index)
+>>>
+[7, 5, 3, 2, 1]
+```
+
+
+
+### list拼接
+
 ```python
 l1=[1,2,3,4,5,6]
 l2=[1,2,3,4,5,6]
@@ -4180,6 +4566,56 @@ l
 ```
 
 ![image-20220205202521873](assess/image-20220205202521873.png)
+
+### 随机打乱list
+
+```python
+x = [1,2,3,4,5,6]
+random.shuffle(x)
+#会改变原来的x
+print(x)
+```
+
+### 删除list的多个index个元素
+
+> 不可以只使用pop删除index，因为在pop的过程中原来的list长度会发生变化，会出现如下报错。**需要对index排序之后逆序循环。**
+
+<img src="assess/image-20220413155531937.png" alt="image-20220413155531937" style="zoom:67%;" />
+
+```python
+import random
+index=random.sample(range(0,9),5)
+index.sort(reverse=True)#逆序排序
+print(index)
+result=random.sample(range(1,15),10)
+print(result)
+for i in index:
+    print(i)
+    #pop时list长度变短了，index超出list的长度范围
+    result.pop(i)
+print(result)
+result+=index
+print(result)
+random.shuffle(result)
+result
+```
+
+![image-20220413155222253](assess/image-20220413155222253.png)
+
+### append()
+
+> 在末尾添加元素
+
+```python
+l=['CharRNN', 'VAE', 'AAE', 'LatenGAN', 'JT-VAE', 'MolGPT']
+l=l.append("test")
+print(l)
+>>>None
+
+l.append("test")
+>>>
+['CharRNN', 'VAE', 'AAE', 'LatenGAN', 'JT-VAE', 'MolGPT', 'test']
+```
 
 
 

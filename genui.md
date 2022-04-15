@@ -135,8 +135,10 @@ export DJANGO_SETTINGS_MODULE=genui.settings.test
 python manage.py test
 ```
 
+### 脚本运行
+
 ```
-#脚本运行
+
 #postsql-rdkit数据库启动
 #第一次设置
 chmod +x ./sqlrun.sh && ./sqlrun.sh
@@ -202,6 +204,29 @@ xyh
 hdcq5683..
 
 ```
+
+接口
+---
+
+```
+http://127.0.0.1:8000/api/compounds/sets/all/?project_id=2
+```
+
+![image-20220405170231508](assess/image-20220405170231508.png)
+
+```
+http://127.0.0.1:8000/api/compounds/sets/molcsv/?project_id=2
+```
+
+![image-20220405170352491](assess/image-20220405170352491.png)
+
+```
+http://127.0.0.1:8000/api/compounds/sets/molcsv/22/
+```
+
+![image-20220405170450761](assess/image-20220405170450761.png)
+
+
 
 
 
@@ -420,4 +445,52 @@ Map
 > 整体框图
 
 ![image-20220323130906247](assess/image-20220323130906247.png)
+
+
+
+
+
+去除activity,更改如下
+
+
+
+![image-20220408164754513](assess/image-20220408164754513.png)
+
+> CompoundOverview.js注释下面部分
+
+![image-20220408164842558](assess/image-20220408164842558.png)
+
+> MapTab.js
+
+![image-20220408171308836](assess/image-20220408171308836.png)
+
+
+
+> Map.js
+
+![image-20220408173828074](assess/image-20220408173828074.png)
+
+![image-20220409194819691](assess/image-20220409194819691.png)
+
+> MolsetActivitiesSummary.js
+
+![image-20220408181240818](assess/image-20220408181240818.png)
+
+> MapSelect.sj
+
+最后只改成就可以了
+
+```
+MapSelect.js改成下面这样就行了
+```
+
+![image-20220408201019490](assess/image-20220408201019490.png)
+
+
+
+
+
+
+
+
 

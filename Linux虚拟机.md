@@ -26,6 +26,52 @@ sudo vi  /etc/NetworkManager/NetworkManager.conf
 sudo service network-manager restart
 ```
 
+Windows使用Linux的web服务
+---
+
+### 查看虚拟机的IP地址
+
+```
+ip addr
+```
+
+![image-20220329102358712](assess/image-20220329102358712.png)
+
+```
+ifconfig
+```
+
+![image-20220329102500577](assess/image-20220329102500577.png)
+
+好像不需要下面这些设置就可以
+
+![2](assess/2-16485203856411.png)
+
+![3](assess/3-16485205599792.png)
+
+window如何查看开放的端口
+
+```
+#查看所有
+netstat -an
+#查看特定端口
+netstat -a|findstr 3030
+```
+
+
+
+Ubuntu的防火墙
+---
+
+> ubuntu 默认的是UFW防火墙
+
+```
+#查看防火墙状态
+sudo ufw status
+```
+
+![image-20220329112611753](assess/image-20220329112611753.png)
+
 安装nginx
 ---
 
@@ -93,6 +139,15 @@ netstat  -anp  |grep 端口号
 ```
 
 ![image-20220306213947401](assess/image-20220306213947401.png)
+
+```
+#或者这种
+ps -ef | grep 5432
+```
+
+![image-20220405115203365](assess/image-20220405115203365.png)
+
+
 
 ### 杀死某个端口的进程
 
@@ -218,7 +273,8 @@ requirements.txt中的git源安装问题
 
 ![image-20220305094828985](assess/image-20220305094828985.png)
 
-
+PostgresSQL使用
+===
 
 **修改PostgreSQL数据库默认用户postgres的密码**
 
@@ -290,6 +346,73 @@ GRANT ALL PRIVILEGES ON DATABASE exampledb to dbuser;
 
 ![image-20220306103219168](assess/image-20220306103219168.png)
 
+常见操作
+---
+
+查看当前数据库所有rolname及密码
+
+```
+select rolname,rolpassword from pg_authid;
+```
+
+![image-20220405123119739](assess/image-20220405123119739.png)
+
+查看用户及密码
+
+```
+select usename,passwd from pg_shadow;
+```
+
+![image-20220405123319944](assess/image-20220405123319944.png)
+
+查看当前数据库
+
+```
+select current_database();
+```
+
+![image-20220405123358346](assess/image-20220405123358346.png)
+
+
+
+其他命令
+
+```sql
+\l					--查看所有数据库
+\dt					--查看表
+\password username	--修改密码
+\password           --设置密码。
+\?                  --查看psql命令列表。
+\c [database_name]  --连接其他数据库，切换数据库。
+\conninfo           --列出当前数据库和连接的信息。
+\d                  --列出当前数据库的所有表格。
+\d [table_name]     --列出某一张表格的结构。
+\du                 --列出所有用户。可以查看用户的权限
+\e                  --打开文本编辑器。
+help				--帮助
+\h                  --查看SQL命令的解释，比如\h select。
+\q					--退出
+
+```
+
+![image-20220405124128083](assess/image-20220405124128083.png)
+
+设置密码(貌似是给当前用户设置的)，看到的密码都是进过md5加密过的，可以去[MD5免费在线解密破解_MD5在线加密-SOMD5](https://www.somd5.com/)去解密看看。将加密后的密码复制到在线解密网（注意去掉md5前缀）
+
+![image-20220405125412285](assess/image-20220405125412285.png)
+
+![image-20220405124820972](assess/image-20220405124820972.png)
+
+修改用户密码，两个回车就清空密码了
+
+```
+\password xyh
+```
+
+![img](assess/WVA%7BUNCN3%5BU4VZG%5D8E%7DK2L.png)
+
+
+
 配置rdki-postgresqpl
 ---
 
@@ -304,7 +427,7 @@ conda install -c rdkit rdkit-postgresql
 `rdkdata`是数据库数据文件目录
 
 ```
-/home/xyh/anaconda3/envs/genui/bin/postgres -D rdkdata
+/home/xyh/anaconda3/envs/genui/bin/initdb -D rdkdata
 ```
 
 ![img](assess/NFH%5DM7A%7DYZ%25UL%7DPTC$@%25HC.png)
@@ -320,7 +443,7 @@ conda install -c rdkit rdkit-postgresql
 杀死某个端口的进程
 
 ```
-sudo fuser -k -n tcp 5
+sudo fuser -k -n tcp 54
 ```
 
 ![img](assess/WH%25CJKKKCX8ZWHF%7D_NE6UVM.png)
@@ -342,6 +465,30 @@ sudo fuser -k -n tcp 5
 给数据库添加rdkit扩展
 
 ![image-20220306221541368](assess/image-20220306221541368.png)
+
+### 服务器上使用postgresq-rdkit
+
+> 与虚拟机上使用基本一致
+
+#### 创建数据库
+
+![image-20220405121522404](assess/image-20220405121522404.png)
+
+```
+#处理数据库，用户必须是创建数据库时的用户
+psql genuidb
+#进入数据库要加上具体的数据库名
+psql genuidb
+
+#安装扩展，注意末尾的分号，出现CREATE EXTENSION表示安装成功
+create extension rdkit；
+#查看当前数据库现有插件
+\dx
+```
+
+![image-20220405121925133](assess/image-20220405121925133.png)
+
+
 
 ### 查看数据库的一些情况
 
@@ -451,3 +598,63 @@ sudo ln -sT /home/xyh/anaconda3/envs/genui/lib/python3.7/site-packages /home/xyh
 ```
 
 ![image-20220314221110328](assess/image-20220314221110328.png)![image-20220314221136272](assess/image-20220314221136272.png)
+
+Ubuntu服务器使用
+---
+
+创建用户并赋予其root权限
+
+```
+adduser 用户名
+```
+
+![img](assess/77U3R$NYAE3SOU%5B$9%7DEYBR.png)
+
+切换到root
+
+```
+sudo vim /etc/sudoers
+```
+
+在“root ALL=(ALL:ALL) ALL”这一行下面加入一行：
+
+new_user ALL=(ALL:ALL) ALL
+
+遇到以下错误
+
+![img](assess/70.png)
+
+一、第一种方法：如果有root权限，可以输入  ：**wq!**强行保存退出。(有效)
+
+二、第二种方法：
+
+（1）按**ESC**
+
+（2）输入  **：set noreadonly**
+
+（3）输入   **：wq**就可保存退出
+
+### 安装anaconda
+
+[清华大学开源软件镜像站](https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/)
+
+![image-20220404224744447](assess/image-20220404224744447.png)
+
+```
+wget https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/Anaconda3-2021.11-Linux-x86_64.sh
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
