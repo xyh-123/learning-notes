@@ -457,7 +457,7 @@ Multi-head Self-attention
 
 > 多相关性自注意力
 
-<img src="assess/image-20211202152040461.png" alt="image-20211202152040461" style="zoom:50%;" /><img src="assess/image-20211202152119103.png" alt="image-20211202152119103" style="zoom:50%;" />
+<img src="assess/image-20211202152040461.png" alt="image-20211202152040461" style="zoom: 80%;" /><img src="assess/image-20211202152119103.png" alt="image-20211202152119103" style="zoom: 80%;" />
 
 head的数目也是一个超参数，需要自己训练
 
@@ -782,6 +782,8 @@ Determinant
 
 ![image-20211209110423312](assess/image-20211209110423312.png)
 
+代表高维空间中的“体积”
+
 Change of Variable Theorem
 ---
 
@@ -789,9 +791,11 @@ Change of Variable Theorem
 
 ![image-20211209111404470](assess/image-20211209111404470.png)
 
-![img](file:///C:\Users\xyh\Documents\Tencent Files\447767881\Image\C2C\Image1\I18CJO$~$R%7O3}3}N4W5[L.png)
+变量变换定理(change of variable Theorem)
 
-![image-20211209112207836](assess/image-20211209112207836.png)
+<img src="file:///C:\Users\xyh\Documents\Tencent Files\447767881\Image\C2C\Image1\I18CJO$~$R%7O3}3}N4W5[L.png" alt="img" style="zoom:80%;" />
+
+<img src="assess/image-20211209112207836.png" alt="image-20211209112207836" style="zoom:80%;" />
 
 $△x_{11}$表示$z_1$改变的时候$x_1$的改变量
 
@@ -801,23 +805,25 @@ $△x_{12}$表示$z_2$改变的时候$x_1$的改变量
 
 $△x_{22}$表示$z_2$改变的时候$x_2$的改变量
 
-![image-20211209133912562](assess/image-20211209133912562.png)
+<img src="assess/image-20211209133912562.png" alt="image-20211209133912562" style="zoom:80%;" />
 
-![image-20211209134205571](assess/image-20211209134205571.png)
+<img src="assess/image-20211209134205571.png" alt="image-20211209134205571" style="zoom:80%;" />
 
-![image-20211209134416620](assess/image-20211209134416620.png)
+<img src="assess/image-20211209134416620.png" alt="image-20211209134416620" style="zoom:80%;" />
 
-![image-20211209134513789](assess/image-20211209134513789.png)
+<img src="assess/image-20211209134513789.png" alt="image-20211209134513789" style="zoom:80%;" />
 
-![image-20211209134731445](assess/image-20211209134731445.png)
+<img src="assess/image-20211209134731445.png" alt="image-20211209134731445" style="zoom:80%;" />
 
-![image-20211209135037055](assess/image-20211209135037055.png)
-
-![image-20211209135309823](assess/image-20211209135309823.png)
+<img src="assess/image-20211209135037055.png" alt="image-20211209135037055" style="zoom:80%;" />
 
 
 
-![image-20211209135427170](assess/image-20211209135427170.png)
+<img src="assess/image-20211209135309823.png" alt="image-20211209135309823" style="zoom:80%;" />
+
+
+
+<img src="assess/image-20211209135427170.png" alt="image-20211209135427170" style="zoom:80%;" />
 
 ![image-20211209140334199](assess/image-20211209140334199.png)
 

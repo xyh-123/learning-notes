@@ -472,7 +472,7 @@ CUDA_VISIBLE_DEVICES=1  nohup bash sf_train_moses.sh > moses_ga.log 2>&1 &
 查看后台任务
 
 ```
-ps -aux | grep "tr.py"
+ps -aux | grep "tra.py"
 ```
 
 ![image-20220316165347772](assess/image-20220316165347772.png)
