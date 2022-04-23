@@ -446,7 +446,7 @@ telnet ip 端口
 输出将会写入map.log文件中
 
 ```
-nohup python -u map.py --run_name moses  > map.log 2>&1 &
+nohup python -u map.py --run_name moses  > SFGPT-GAS.log 2>&1 &
 ```
 
 运行脚本
@@ -460,7 +460,7 @@ python -u../sf/train.py --run_name sf_moses_ga --max_len 55 --data_name moses --
 
 
 ```
-CUDA_VISIBLE_DEVICES=1  nohup bash sf_train_moses.sh > moses_ga.log 2>&1 &
+CUDA_VISIBLE_DEVICES=1  nohup bash sf_train_moses.sh > SFGPT-GAS.t 2>&1 &
 ```
 
 ![image-20220413224539551](assess/image-20220413224539551.png)
@@ -472,7 +472,7 @@ CUDA_VISIBLE_DEVICES=1  nohup bash sf_train_moses.sh > moses_ga.log 2>&1 &
 查看后台任务
 
 ```
-ps -aux | grep "tra.py"
+ps -aux | grep "train.py"
 ```
 
 ![image-20220316165347772](assess/image-20220316165347772.png)

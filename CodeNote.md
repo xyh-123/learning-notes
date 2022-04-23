@@ -2712,7 +2712,7 @@ l.values[0]
 >>>1.0
 ```
 
-将DataFrame数据转变成list
+将Series数据转变成list
 ---
 
 ```
@@ -2755,11 +2755,15 @@ print(x_data)
 x_data = df['models'].tolist()
 x_data = x_data[:6]
 print(x_data)
+
 x_data.append("test")
 print(x_data)
 ```
 
 ![image-20220409155438414](assess/image-20220409155438414.png)
+
+将DataFrame数据转变成list
+---
 
 drop
 ---

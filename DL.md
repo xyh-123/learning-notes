@@ -611,7 +611,7 @@ Decoder
 
 Masked Self-attention不考虑右边的vector,只考虑左边的vector。
 
-<img src="assess/image-20211202184620371.png" alt="image-20211202184620371" style="zoom:50%;" /><img src="assess/image-20211202184347656.png" alt="image-20211202184347656" style="zoom:50%;" />
+<img src="assess/image-20211202184620371.png" alt="image-20211202184620371" style="zoom: 80%;" /><img src="assess/image-20211202184347656.png" alt="image-20211202184347656" style="zoom: 80%;" />
 
 $b^1,b^2,b^3,b^4$是依次产生的，不是一次性产生
 
