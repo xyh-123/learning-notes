@@ -5223,3 +5223,225 @@ __day 日期字段的日
 __isnull=True/False
 ```
 
+
+
+Echarts绘图
+===
+
+```
+option = {
+  // title: {
+  //   text: 'World Population'
+  // },
+  legend: {
+    textStyle: {
+      //图例字体大小
+      fontSize: 20,
+    },
+    //图例大小
+    itemHeight: 20,
+  },
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: {
+      type: 'shadow'
+    }
+  },
+  grid: {
+    left: '3%',
+    right: '4%',
+    bottom: '3%',
+    containLabel: true
+  },
+  xAxis: {
+    type: 'value',
+    boundaryGap: [0, 0.01],
+    axisLabel: {
+       show: true,
+        textStyle: {
+          fontSize : 20 ,     //更改坐标轴文字大小
+          color:'Black'
+        }
+     },
+  },
+  yAxis: {
+    type: 'category',
+    data: ['Filters', 'Scaf/TestSF', 'Scaf/Test', 'Frag/TestSF', 'Frag/Test', 'SNN/TestSF', 'SNN/Test', 'FCD/TestSF↓', 'FCD/Test↓', 'Novelty'],
+     axisLabel: {
+       show: true,
+        textStyle: {
+          fontSize : 20,      //更改坐标轴文字大小
+           color:'Black'
+        }}
+  },
+  series: [
+    {
+      name: 'SFGPT',
+      type: 'bar',
+      data: [0.999, 0.075, 0.861, 0.997, 0.999, 0.549, 0.58, 0.718, 0.227, 0.892],
+       itemStyle:{
+        normal:{
+           label:{ 
+             fontSize:20,
+              color:'Black',
+             position:'right',
+             show:true
+           } 
+
+        }
+       
+      }
+    },
+    {
+      name: 'Large',
+      type: 'bar',
+       data: [0.985, 0.113, 0.848, 0.998, 1, 0.556, 0.589, 0.602, 0.177, 0.868],
+        itemStyle:{
+        normal:{
+           label:{ 
+             fontSize:20,
+              color:'Black',
+             position:'right',
+             show:true
+           } 
+
+        }
+       
+      }
+    },
+    {
+      name: 'GA',
+      type: 'bar',
+      data: [0.981, 0.106, 0.854, 0.998, 1, 0.559, 0.595, 0.669, 0.176, 0.837],
+       itemStyle:{
+        normal:{
+           label:{ 
+             fontSize:20,
+              color:'Black',
+             position:'right',
+             show:true
+           } 
+
+        }
+       
+      }
+    }
+  ]
+};
+```
+
+![image-20220518131032150](assess/image-20220518131032150.png)
+
+```
+option = {
+  legend: {
+     textStyle: {
+      //图例字体大小
+      fontSize: 20,
+    },
+    //图例大小
+    itemHeight: 20,
+  },
+  tooltip: {},
+  dataset: {
+    dimensions: ['product', 'gua','top_p=0.9', 'top_p=0.95', 'top_k=44,temp=1','top_k=44,temp=0.8'],
+    source: [
+      { product: 'FCD','gua':1.34,'top_p=0.9': 1.407, 'top_p=0.95': 1.04, 'top_k=44,temp=1': 0.926,'top_k=44,temp=0.8':1.22},
+      { product: 'KL Divergence', 'gua':0.974,'top_p=0.9': 0.982, 'top_p=0.95': 0.986, 'top_k=44,temp=1': 0.974,'top_k=44,temp=0.8':0.985},
+    
+    ]
+  },
+  xAxis: { type: 'category' ,
+    axisLabel: {
+       show: true,
+        textStyle: {
+          fontSize : 20 ,     //更改坐标轴文字大小
+          color:'Black'
+        }
+     },
+  },
+  yAxis: {
+    axisLabel: {
+       show: true,
+        textStyle: {
+          fontSize : 20,      //更改坐标轴文字大小
+           color:'Black'
+        }}
+  },
+  // Declare several bar series, each will be mapped
+  // to a column of dataset.source by default.
+  series: [
+    { type: 'bar',
+      itemStyle:{
+        normal:{
+           label:{
+             position:'top',
+              show:true,
+              fontSize:20,
+              color:'Black',
+             
+           }
+        }
+       
+      }
+    },
+ { type: 'bar',
+      itemStyle:{
+        normal:{
+           label:{
+             position:'top',
+             show:true,
+              fontSize:20,
+              color:'Black',
+           }
+        }
+       
+      }
+    },
+  { type: 'bar',
+      itemStyle:{
+        normal:{
+           label:{
+             position:'top',
+             show:true,
+              fontSize:20,
+              color:'Black',
+             
+           }
+        }
+       
+      }
+    },
+  { type: 'bar',
+      itemStyle:{
+        normal:{
+           label:{
+             position:'top',
+              show:true,
+              fontSize:20,
+              color:'Black',
+             
+           }
+        }
+       
+      }
+    },
+  { type: 'bar',
+      itemStyle:{
+        normal:{
+           label:{
+             position:'top',
+              show:true,
+              fontSize:20,
+              color:'Black',
+             
+           }
+        }
+       
+      }
+    },
+  ]
+};
+```
+
+![image-20220518130956196](assess/image-20220518130956196.png)
